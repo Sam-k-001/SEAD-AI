@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Model files (too large for GitHub)
+models/saved/
+
+# Datasets (too large for GitHub)
+datasets/raw/
+datasets/processed/
+
+# Database
+database/*.db
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.DS_Store

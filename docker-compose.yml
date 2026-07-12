@@ -1,0 +1,14 @@
+version: "3.9"
+services:
+  sead-ai:
+    build: .
+    container_name: sead-ai
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./database:/app/database
+      - ./models/saved:/app/models/saved
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+    restart: unless-stopped

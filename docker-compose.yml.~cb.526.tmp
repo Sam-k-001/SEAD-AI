@@ -1,0 +1,18 @@
+# docker-compose.yml — SEAD-AI
+# Usage: docker-compose up
+
+version: "3.9"
+
+services:
+  sead-ai:
+    build: .
+    container_name: sead-ai
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./database:/app/database       # persist SQLite database
+      - ./models/saved:/app/models/saved  # persist trained model
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=False
+    restart: unless-stopped

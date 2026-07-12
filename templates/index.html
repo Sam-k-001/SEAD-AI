@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SEAD-AI — Social Engineering Attack Detector</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-shield">⬡</span>
+      <span class="logo-text">SEAD<span class="logo-ai">-AI</span></span>
+    </div>
+    <nav class="nav">
+      <button class="nav-btn active" onclick="showSection('analyzer')">Analyzer</button>
+      <button class="nav-btn" onclick="showSection('history')">History</button>
+      <button class="nav-btn" onclick="showSection('dashboard')">Dashboard</button>
+    </nav>
+    <div class="header-badge" id="statusBadge">
+      <span class="badge-dot"></span> System Ready
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">Powered by BERT + Cialdini Psychology Model</p>
+    <h1 class="hero-title">Detect Social Engineering<br><span class="hero-accent">Before It Deceives You</span></h1>
+    <p class="hero-sub">Paste any email, SMS, or message. SEAD-AI analyzes language patterns and psychological manipulation tactics in real time.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main class="main">
+
+  <!-- ─── ANALYZER SECTION ──────────────────────────────── -->
+  <section id="analyzerSection" class="section active">
+    <div class="analyzer-grid">
+
+      <!-- Input Panel -->
+      <div class="panel input-panel">
+        <div class="panel-header">
+          <span class="panel-label">INPUT</span>
+          <h2 class="panel-title">Paste Message to Analyze</h2>
+        </div>
+
+        <textarea
+          id="messageInput"
+          class="message-input"
+          placeholder="Paste an email, SMS, or any suspicious message here...
+
+Example:
+URGENT: Your bank account has been suspended! Click here immediately to verify your identity or your account will be permanently deleted within 24 hours. Failure to respond will result in legal action."
+          rows="10"
+        ></textarea>
+
+        <div class="input-footer">
+          <span class="char-count" id="charCount">0 / 10,000</span>
+          <div class="input-actions">
+            <button class="btn-ghost" onclick="clearAll()">Clear</button>
+            <button class="btn-ghost" onclick="loadExample()">Try Example</button>
+            <button class="btn-primary" id="analyzeBtn" onclick="analyze()">
+              <span class="btn-icon">⬡</span>
+              Analyze Message
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Result Panel -->
+      <div class="panel result-panel" id="resultPanel">
+
+        <!-- Empty state -->
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">⬡</div>
+          <p class="empty-title">No analysis yet</p>
+          <p class="empty-sub">Paste a message on the left and click Analyze.</p>
+        </div>
+
+        <!-- Loading state -->
+        <div class="loading-state hidden" id="loadingState">
+          <div class="spinner"></div>
+          <p class="loading-text">Analyzing message...</p>
+          <p class="loading-sub">Running BERT + Psychology scan</p>
+        </div>
+
+        <!-- Result content -->
+        <div class="result-content hidden" id="resultContent">
+
+          <!-- Threat meter -->
+          <div class="threat-meter-block">
+            <div class="threat-header">
+              <span class="threat-emoji" id="resultEmoji">🚨</span>
+              <div>
+                <p class="threat-label">Threat Score</p>
+                <p class="threat-risk" id="resultRiskLevel">High Risk</p>
+              </div>
+              <div class="threat-score-num" id="resultScoreNum">0%</div>
+            </div>
+
+            <div class="meter-bar-wrap">
+              <div class="meter-bar">
+                <div class="meter-fill" id="meterFill"></div>
+              </div>
+              <div class="meter-labels">
+                <span>Safe</span><span>Suspicious</span><span>High Risk</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score breakdown -->
+          <div class="score-breakdown">
+            <div class="score-card">
+              <p class="score-card-label">BERT AI</p>
+              <p class="score-card-val" id="bertScoreVal">—</p>
+            </div>
+            <div class="score-card-op">×0.7 + ×0.3</div>
+            <div class="score-card">
+              <p class="score-card-label">Psychology</p>
+              <p class="score-card-val" id="psychScoreVal">—</p>
+            </div>
+            <div class="score-card-op">=</div>
+            <div class="score-card score-card-final">
+              <p class="score-card-label">Threat</p>
+              <p class="score-card-val" id="finalScoreVal">—</p>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div class="result-summary" id="resultSummary"></div>
+
+          <!-- Triggered principles -->
+          <div class="section-block" id="principlesBlock">
+            <h3 class="block-title">Psychological Triggers Detected</h3>
+            <div class="principles-list" id="principlesList"></div>
+          </div>
+
+          <!-- Reasons -->
+          <div class="section-block" id="reasonsBlock">
+            <h3 class="block-title">Why This Was Flagged</h3>
+            <ul class="reasons-list" id="reasonsList"></ul>
+          </div>
+
+          <!-- Suspicious patterns -->
+          <div class="section-block" id="patternsBlock">
+            <h3 class="block-title">Suspicious Patterns</h3>
+            <div class="patterns-list" id="patternsList"></div>
+          </div>
+
+          <!-- Advice -->
+          <div class="advice-block" id="adviceBlock">
+            <span class="advice-icon">💡</span>
+            <div>
+              <p class="advice-label">Recommended Action</p>
+              <p class="advice-text" id="adviceText"></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HISTORY SECTION ───────────────────────────────── -->
+  <section id="historySection" class="section hidden">
+    <div class="section-header">
+      <h2 class="section-title">Scan History</h2>
+      <button class="btn-ghost" onclick="loadHistory()">↻ Refresh</button>
+    </div>
+    <div id="historyList" class="history-list">
+      <p class="loading-text">Loading history...</p>
+    </div>
+  </section>
+
+  <!-- ─── DASHBOARD SECTION ─────────────────────────────── -->
+  <section id="dashboardSection" class="section hidden">
+    <div class="section-header">
+      <h2 class="section-title">Dashboard</h2>
+      <button class="btn-ghost" onclick="loadStats()">↻ Refresh</button>
+    </div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card">
+        <p class="stat-val" id="statTotal">—</p>
+        <p class="stat-label">Total Scans</p>
+      </div>
+      <div class="stat-card stat-danger">
+        <p class="stat-val" id="statHighRisk">—</p>
+        <p class="stat-label">High Risk Detected</p>
+      </div>
+      <div class="stat-card stat-warn">
+        <p class="stat-val" id="statSuspicious">—</p>
+        <p class="stat-label">Suspicious</p>
+      </div>
+      <div class="stat-card stat-safe">
+        <p class="stat-val" id="statSafe">—</p>
+        <p class="stat-label">Safe Messages</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-val" id="statAvgScore">—</p>
+        <p class="stat-label">Avg Threat Score</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-val" id="statTopTrigger">—</p>
+        <p class="stat-label">Most Common Trigger</p>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="about-block">
+      <h3 class="block-title">About SEAD-AI</h3>
+      <div class="about-grid">
+        <div class="about-card">
+          <p class="about-card-title">🧠 BERT NLP Model</p>
+          <p class="about-card-body">Fine-tuned bert-base-uncased on phishing + legitimate email dataset. Detects subtle language manipulation patterns invisible to rule-based systems.</p>
+        </div>
+        <div class="about-card">
+          <p class="about-card-title">⚡ Psychology Engine</p>
+          <p class="about-card-body">First system to encode Cialdini's 6 Influence Principles as ML features: Authority, Urgency, Scarcity, Social Proof, Reciprocity, and Liking.</p>
+        </div>
+        <div class="about-card">
+          <p class="about-card-title">🔍 Explainable AI</p>
+          <p class="about-card-body">Every detection comes with a plain-language explanation of exactly why the message was flagged — not just a score.</p>
+        </div>
+        <div class="about-card">
+          <p class="about-card-title">📐 Threat Formula</p>
+          <p class="about-card-body">Threat Score = 0.7 × BERT Score + 0.3 × Psychology Score. Weighted fusion combines deep learning with psychological analysis.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER -->
+<footer class="footer">
+  <p>SEAD-AI v1.0 — B.Tech Cybersecurity Research Project · 2025</p>
+</footer>
+
+<script src="/static/js/script.js"></script>
+</body>
+</html>
